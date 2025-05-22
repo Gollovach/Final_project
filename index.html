@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#" id="encrypt-tab">Зашифровка QR-кода</a></li>
+            <li><a href="#" id="decrypt-tab">Расшифровка QR-кода</a></li>
+            <li><a href="#" id="profile-tab">Профиль</a></li>
+        </ul>
+    </nav>
+
+    <div class="window" id="encrypt-window">
+        <h2>Генерация QR-кода</h2>
+        <form id="qr-form" action="/generate_qr" method="POST">
+            <input type="text" id="link" name="link" placeholder="Введите ссылку для QR-кода">
+        </form>
+        <div id="qr-container">
+            <!-- QR код будет вставлен сюда -->
+        </div>
+        <button id="generate-btn" type="submit">Генерировать QR</button> <!-- Кнопка отдельно от формы -->
+    </div>
+
+    <div class="window" id="decrypt-window" style="display: none;">
+        <h2>Расшифровка QR-кода</h2>
+        <input type="file" id="qr-file" accept="image/*">
+        <button id="decrypt-btn">Расшифровать QR</button>
+        <div id="decoded-text">
+            <!-- Расшифрованный текст будет здесь -->
+        </div>
+    </div>
+
+    <div class="window" id="profile-window" style="display: none;">
+        <h2>Профиль</h2>
+        <p>Здесь будет информация о вашем профиле.</p>
+        <!-- Добавьте сюда контент профиля -->
+    </div>
+
+    <script>
+        // JavaScript для переключения между окнами
+        const encryptTab = document.querySelector('#encrypt-tab');
+        const decryptTab = document.querySelector('#decrypt-tab');
+        const profileTab = document.querySelector('#profile-tab');
+
+        const encryptWindow = document.querySelector('#encrypt-window');
+        const decryptWindow = document.querySelector('#decrypt-window');
+        const profileWindow = document.querySelector('#profile-window');
+
+        encryptTab.addEventListener('click', () => {
+            encryptWindow.style.display = 'block';
+            decryptWindow.style.display = 'none';
+            profileWindow.style.display = 'none';
+        });
+
+        decryptTab.addEventListener('click', () => {
+            encryptWindow.style.display = 'none';
+            decryptWindow.style.display = 'block';
+            profileWindow.style.display = 'none';
+        });
+
+        profileTab.addEventListener('click', () => {
+            encryptWindow.style.display = 'none';
+            decryptWindow.style.display = 'none';
+            profileWindow.style.display = 'block';
+        });
+
+        // JavaScript для обработки ответа и отображения изображения QR кода
+        const form = document.querySelector('#qr-form');
+        const button = document.querySelector('#generate-btn');
+        const qrContainer = document.querySelector('#qr-container');
+
+        button.addEventListener('click', async (e) => {
+            e.preventDefault(); // Останавливаем стандартное поведение кнопки
+
+            const formData = new FormData(form);
+            const response = await fetch('/generate_qr', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await response.json();
+            if (data.qr_image) {
+                const qrImg = document.createElement('img');
+                qrImg.src = `data:image/png;base64,${data.qr_image}`;
+                qrContainer.innerHTML = ''; // Очищаем предыдущие изображения
+                qrContainer.appendChild(qrImg);
+            } else {
+                alert('Ошибка генерации QR-кода');
+            }
+        });
+    </script>
+</body>
+</html>
