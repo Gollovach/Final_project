@@ -1,0 +1,142 @@
+/* Основные стили */
+body {
+    font-family: 'WDX', Arial, sans-serif;
+    background: linear-gradient(to bottom, #a1c4fd, #c2e9fb);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+@font-face {
+    font-family: 'WDX';
+    src: url('../fonts/WDXLLubrifontTC-Regular.ttf') format('truetype');
+}
+
+/* Навигация */
+.navigation {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    background: rgba(255,255,255,0.9);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+}
+
+.button nav {
+    display: flex;
+    justify-content: space-between;
+}
+
+.main_page, #reg {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.main_page {
+    background: #4a90e2;
+    color: white;
+    margin-right: 15px;
+}
+
+#reg {
+    background: #2ecc71;
+    color: white;
+    margin-left: auto;
+}
+
+/* Окно с QR-кодом */
+.main-content {
+    margin-top: 80px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.window {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    width: 90%;
+    max-width: 800px;
+    min-height: 70vh;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Форма */
+#qr-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#link {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #a1c4fd;
+    border-radius: 15px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+#link:focus {
+    outline: none;
+    border-color: #4a90e2;
+}
+
+#generate-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(to right, #4a90e2, #6ba8e8);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 8px rgba(74, 144, 226, 0.2);
+}
+
+#generate-btn:hover {
+    background: linear-gradient(to right, #3a80d2, #5b98d8);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(74, 144, 226, 0.3);
+}
+
+/* Контейнер QR-кода */
+#qr-container {
+    margin-top: 30px;
+    border: 2px dashed #e0e0e0;
+    border-radius: 15px;
+    min-height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+}
+
+#qr-container img {
+    width: 300px;       /* Фиксированная ширина */
+    height: 300px;      /* Фиксированная высота */
+    max-width: 100%;    /* Не будет превышать ширину контейнера */
+    object-fit: contain; /* Сохраняет пропорции */
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+
+.placeholder {
+    color: #999;
+    font-style: italic;
+}

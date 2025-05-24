@@ -1,58 +1,65 @@
 import os
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 import qrcode
 from io import BytesIO
 import base64
 
-app = Flask(__name__)
+# Инициализация Flask с правильными путями
+app = Flask(__name__,
+    template_folder=os.path.join(os.path.dirname(os.path.dirname(__file__)), 'page'),
+    static_folder=os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static')
+)
 
 def generate_qr_code(text):
     try:
-        if not text:
-            return None
-        
         qr = qrcode.QRCode(
-            version=1,  # Вы можете изменить это на большее значение для более крупных кодов, если необходимо
+            version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=15,  # Увеличиваем размер каждого "квадратика" в QR-коде
-            border=4,
+            box_size=12,  # Увеличиваем размер каждого "пикселя" QR-кода (было 10)
+            border=2,     # Уменьшаем белую рамку вокруг QR-кода (было 4)
         )
         qr.add_data(text)
         qr.make(fit=True)
-        img = qr.make_image(fill_color="black", back_color="white")  # Черный QR-код на белом фоне
         
-        # Сохраняем изображение в памяти
-        img_io = BytesIO()
-        img.save(img_io, 'PNG')
-        img_io.seek(0)
+        img = qr.make_image(fill_color="#4a90e2", back_color="white")
         
-        # Конвертируем изображение в формат Base64
-        img_base64 = base64.b64encode(img_io.getvalue()).decode('utf-8')
-        return img_base64
+        buf = BytesIO()
+        img.save(buf, format="PNG")
+        return base64.b64encode(buf.getvalue()).decode("utf-8")
     except Exception as e:
-        print(f"Ошибка при генерации QR-кода: {e}")
+        print(f"Ошибка генерации QR: {e}")
         return None
 
-
 @app.route('/')
-def index():
-    return render_template('index.html')
+def home():
+    """Главная страница с формой"""
+    return render_template('qr_generate.html')
 
 @app.route('/generate_qr', methods=['POST'])
-def generate_qr():
+def handle_qr_generation():
+    """Обработчик генерации QR"""
     try:
-        text = request.form['link']  # Получаем ссылку из формы
+        text = request.form.get('link')
         if not text:
-            return jsonify({'error': 'No text provided for QR generation'}), 400
-
-        qr_image = generate_qr_code(text)  # Генерируем QR код
-        if qr_image is None:
-            return jsonify({'error': 'Failed to generate QR code'}), 500
+            return jsonify({'error': 'Введите текст для QR-кода'}), 400
         
-        return jsonify({'qr_image': qr_image})  # Отправляем изображение в формате base64
+        qr_image = generate_qr_code(text)
+        if not qr_image:
+            return jsonify({'error': 'Ошибка генерации QR'}), 500
+            
+        return jsonify({'qr_image': qr_image})
     except Exception as e:
-        print(f"Ошибка при обработке запроса: {e}")
-        return jsonify({'error': 'Internal server error'}), 500
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    """Отдача статических файлов"""
+    return send_from_directory(app.static_folder, filename)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Создаем папки если их нет
+    os.makedirs(app.template_folder, exist_ok=True)
+    os.makedirs(app.static_folder, exist_ok=True)
+    
+    # Запускаем сервер
+    app.run(debug=True, port=5000)
