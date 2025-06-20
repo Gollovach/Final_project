@@ -9,7 +9,7 @@ body {
 
 @font-face {
     font-family: 'WDX';
-    src: url('../fonts/WDXLLubrifontTC-Regular.ttf') format('truetype');
+    src: url('/static/fonts/WDXLLubrifontTC-Regular.ttf') format('truetype');
 }
 
 /* Навигация */
@@ -26,6 +26,13 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 15px 20px;
+}
+h2, p {
+    font-family: 'WDX';
+}
+
+.button {
+    font-family: 'WDX';
 }
 
 .button nav {
@@ -94,6 +101,7 @@ body {
 }
 
 #generate-btn {
+    font-family: 'WDX';
     width: 100%;
     padding: 15px;
     background: linear-gradient(to right, #4a90e2, #6ba8e8);
@@ -135,6 +143,50 @@ body {
     border-radius: 10px;
 }
 
+/* Добавьте эти стили в ваш style.css */
+
+/* Стили для форм в навигации */
+.button nav form {
+    display: inline-block; /* Размещаем формы в одну строку */
+    margin: 0;
+    padding: 0;
+}
+
+.button nav button {
+    font-family: 'WDX', Arial, sans-serif;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-block; /* Убираем стандартное поведение кнопки в форме */
+}
+
+/* Убираем стандартные отступы у форм */
+form {
+    margin: 0;
+}
+
+/* Улучшаем внешний вид кнопок при наведении */
+.button nav .main_page:hover {
+    background: #3a80d2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.button nav #reg:hover {
+    background: #27ae60;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Убираем стандартные стили для кнопок в формах */
+.button nav button[type="submit"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
 
 .placeholder {
     color: #999;
