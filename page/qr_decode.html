@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Расшифровка QR-кода</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <div class="navigation">
+            <div class="container">
+                <div class="button">
+                    <nav>
+                        <a href="/" class="main_page">Генерация QR</a>
+                        <a href="/decode" class="main_page">Расшифровка QR</a>
+                        <a href="/auth" id="reg">Регистрация/Вход</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="window">
+            <h2>Расшифровка QR-кода</h2>
+            <div class="upload-area" id="drop-zone">
+                <p>Перетащите или вставьте сюда изображение</p>
+                <input type="file" id="file" name="file" accept="image/*" hidden>
+                <button id="browse-btn">Выбрать файл</button>
+            </div>
+            <div id="preview-container">
+                <img id="preview-image" src="#" alt="Предпросмотр" style="display: none;">
+            </div>
+            <div id="result-container">
+                <p class="placeholder">Здесь появится результат</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/decode.js"></script>
+</body>
+</html>
